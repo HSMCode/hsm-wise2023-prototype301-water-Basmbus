@@ -5,41 +5,45 @@ using UnityEngine.SceneManagement;
 
 public class RespawnManager : MonoBehaviour
 {
-    public GameObject buttonContinue; // the death message and reset button
-    public GameObject buttonWin; //win message and restart button
+    public GameObject buttonContinue; // Todesnachricht und Zurücksetzschaltfläche
+    public GameObject buttonWin; // Gewinnnachricht und Neustartschaltfläche
     public GameObject jellyFish;
     public bool Death;
     public bool GameWon;
-    // Update is called once per frame
-    void Start ()
+
+    void Start()
     {
-        buttonContinue.SetActive(false); //hide the reset button
+        buttonContinue.SetActive(false); // Zurücksetzschaltfläche ausblenden
         buttonWin.SetActive(false);
     }
+
     void Update()
     {
-        Death = jellyFish.GetComponent<DestroyOnCollision>().Death; //grab the Death Flag boolean from CylinderCollider.cs
-        if (Death == true)
+        Death = jellyFish.GetComponent<DestroyOnCollision>().Death;
+        if (Death)
         {
-            buttonContinue.SetActive(true); //activate the reset button
+            buttonContinue.SetActive(true);
             if (Input.GetKeyDown("space"))
             {
-                Resetti();
+                StartCoroutine(ResetWithDelay());
             }
         }
+
         GameWon = jellyFish.GetComponent<CubeController>().GameWon;
-        if (GameWon == true)
+        if (GameWon)
         {
             buttonWin.SetActive(true);
             if (Input.GetKeyDown("space"))
             {
-                Resetti();
+                StartCoroutine(ResetWithDelay());
             }
         }
-
     }
-    public void Resetti()
+
+    IEnumerator ResetWithDelay()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);    //reload scene
+        yield return new WaitForSeconds(1f); // Wartezeit von 2 Sekunden
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Szene neu laden
     }
 }

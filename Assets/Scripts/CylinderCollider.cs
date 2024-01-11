@@ -13,6 +13,7 @@ public class DestroyOnCollision : MonoBehaviour
     public Rigidbody rb;
     public Collider bc;
     public Animator animator;
+    [SerializeField] private AudioSource collectionSoundEffect;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class DestroyOnCollision : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Cylinder")) // Überprüfe, ob das kollidierte Objekt ein "Cylinder"-Tag hat
         {
+            collectionSoundEffect.Play();
             bc = GetComponent<BoxCollider>();
             bc.enabled = false; //remove the collider to avoid the jellyfish getting thrown into oblivion (with the camera attached)
             GetComponent<AutoMovementX>().enabled = false;
